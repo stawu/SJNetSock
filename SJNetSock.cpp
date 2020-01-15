@@ -1,14 +1,26 @@
+//
+// Simple Network Sockets library for Windows and Linux
+
+// Copyright (C) 2020  Jakub Stawiski
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include "SJNetSock.hpp"
 #include <vector>
 #include <cstring>
 #include <array>
 #include <algorithm>
-
-#define DATAPACKET_SIZE_T uint16_t
-#define DATAPACKET_SIZE_T_MAX UINT16_MAX
-
-using namespace sj::API_RESERVED;
-
 //LINUX
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -17,18 +29,81 @@ using namespace sj::API_RESERVED;
 #include <arpa/inet.h>
 //LINUX
 
-//DataPacket Class
-sj::DataPacket::DataPacket(){};
-sj::DataPacket::~DataPacket(){};
+#define DATAPACKET_SIZE_T uint16_t
+#define DATAPACKET_SIZE_T_MAX UINT16_MAX
 
-sj::Status sj::DataPacket::allDataReaded(){
+using namespace sj::API_RESERVED;
+
+///////////////////////////////////////////////
+//  DataPacket Class
+///////////////////////////////////////////////
+sj::DataPacket::DataPacket() {
+
+};
+
+
+///////////////////////////////////////////////
+sj::DataPacket::~DataPacket() {
+
+};
+
+
+///////////////////////////////////////////////
+sj::Status sj::DataPacket::allDataReaded() {
     return data.size() == 0 ? Status::OK : Status::ERROR;
 }
-sj::DataPacket& sj::DataPacket::operator<<(const std::int8_t value){ return operator<< <std::int8_t>(value); }
-sj::DataPacket& sj::DataPacket::operator<<(const std::int16_t value){ return operator<< <std::int16_t>(value); }
-sj::DataPacket& sj::DataPacket::operator<<(const std::int32_t value){ return operator<< <std::int32_t>(value); }
-sj::DataPacket& sj::DataPacket::operator<<(const std::int64_t value){ return operator<< <std::int64_t>(value); }
-sj::DataPacket& sj::DataPacket::operator<<(const std::string& value){
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::int8_t value) {
+    return operator<< <std::int8_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::int16_t value) { 
+    return operator<< <std::int16_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::int32_t value) {
+    return operator<< <std::int32_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::int64_t value) { 
+    return operator<< <std::int64_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::uint8_t value) {
+    return operator<< <std::uint8_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::uint16_t value) { 
+    return operator<< <std::uint16_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::uint32_t value) {
+    return operator<< <std::uint32_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::uint64_t value) { 
+    return operator<< <std::uint64_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator<<(const std::string& value) {
     for(auto strIt = value.begin(); strIt != value.end(); strIt++)
         operator<<( (std::int8_t)(*strIt) );
 
@@ -36,11 +111,57 @@ sj::DataPacket& sj::DataPacket::operator<<(const std::string& value){
     return (*this);
 }
 
-sj::DataPacket& sj::DataPacket::operator>>(std::int8_t& value){ return operator>> <std::int8_t>(value); }
-sj::DataPacket& sj::DataPacket::operator>>(std::int16_t& value){ return operator>> <std::int16_t>(value); }
-sj::DataPacket& sj::DataPacket::operator>>(std::int32_t& value){ return operator>> <std::int32_t>(value); }
-sj::DataPacket& sj::DataPacket::operator>>(std::int64_t& value){ return operator>> <std::int64_t>(value); }
-sj::DataPacket& sj::DataPacket::operator>>(std::string& value){
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::int8_t& value) { 
+    return operator>> <std::int8_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::int16_t& value) { 
+    return operator>> <std::int16_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::int32_t& value) { 
+    return operator>> <std::int32_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::int64_t& value) { 
+    return operator>> <std::int64_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::uint8_t& value) { 
+    return operator>> <std::uint8_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::uint16_t& value) { 
+    return operator>> <std::uint16_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::uint32_t& value) { 
+    return operator>> <std::uint32_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::uint64_t& value) { 
+    return operator>> <std::uint64_t>(value); 
+}
+
+
+///////////////////////////////////////////////
+sj::DataPacket& sj::DataPacket::operator>>(std::string& value) {
     char currentChar = '\0';
     value.clear();
     do{
@@ -51,64 +172,88 @@ sj::DataPacket& sj::DataPacket::operator>>(std::string& value){
     
     return (*this);
 }
-//DataPacket Class
 
-//Socket Class
-sj::API_RESERVED::Socket::Socket(const Mode mode) : socket_fd(-1), mode(mode), dataPacketsBuffer(0)
-{}
 
-sj::API_RESERVED::Socket::~Socket() {}
+///////////////////////////////////////////////
+//  Socket class
+///////////////////////////////////////////////
+sj::API_RESERVED::Socket::Socket(const Mode mode) 
+    : socket_fd(-1), mode(mode), dataPacketsBuffer(0) {
 
-int sj::API_RESERVED::Socket::create(const Socket::Type type){
+}
+
+
+///////////////////////////////////////////////
+sj::API_RESERVED::Socket::~Socket() {
+
+}
+
+
+///////////////////////////////////////////////
+int sj::API_RESERVED::Socket::create(const Socket::Type type) {
     socket_fd = ::socket(AF_INET, type == Type::TCP ? SOCK_STREAM : SOCK_DGRAM, 0);
     return socket_fd;
 }
-int sj::API_RESERVED::Socket::bind(const short port){
+
+
+///////////////////////////////////////////////
+int sj::API_RESERVED::Socket::bind(const short port) {
     sockaddr_in addr;
     addr.sin_port = htons(port);
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
     return ::bind(socket_fd, (sockaddr*)&addr, sizeof(addr));
 }
-sj::Status sj::API_RESERVED::Socket::receiveInto(DataPacket& dataPacket){
+
+
+///////////////////////////////////////////////
+sj::Status sj::API_RESERVED::Socket::receiveInto(DataPacket& dataPacket) {
     do{
+        //Check if already any bytes of packet is stored in buffer
         if(dataPacketsBuffer.size() >= sizeof(DATAPACKET_SIZE_T)){
-            DATAPACKET_SIZE_T packetSizeInBuffer;
-            {
-                size_t currentByte = 0;
-                auto it = dataPacketsBuffer.begin();
-                while(currentByte < sizeof(packetSizeInBuffer)){
-                    char* const packetSizeInBufferPtr = (char*) &packetSizeInBuffer;
-                    *(packetSizeInBufferPtr + currentByte) = *it;
+            DATAPACKET_SIZE_T packetSizeInBuffer;//Packet size
+            
+            //Get packet size value
+            size_t currentByte = 0;
+            auto it = dataPacketsBuffer.begin();
+            while(currentByte < sizeof(packetSizeInBuffer)){
+                char* const packetSizeInBufferPtr = (char*) &packetSizeInBuffer;
+                *(packetSizeInBufferPtr + currentByte) = *it;
+
+                currentByte++;
+                it++;
+            }
+
+            //Check if whole packet is already in buffer...
+            if(packetSizeInBuffer >= (dataPacketsBuffer.size() - sizeof(packetSizeInBuffer)) ){
+                //... if it is, read it and exit receive function
+                while(currentByte < (packetSizeInBuffer + sizeof(packetSizeInBuffer))){
+                    dataPacket.data.push(*it);
 
                     currentByte++;
                     it++;
                 }
 
-                if(packetSizeInBuffer >= (dataPacketsBuffer.size() - sizeof(packetSizeInBuffer)) ){
-                    while(currentByte < (packetSizeInBuffer + sizeof(packetSizeInBuffer))){
-                        dataPacket.data.push(*it);
-
-                        currentByte++;
-                        it++;
-                    }
-
-                    dataPacketsBuffer.erase(dataPacketsBuffer.begin(), it);
-                    return Status::OK;
-                }
-            }   
+                dataPacketsBuffer.erase(dataPacketsBuffer.begin(), it);
+                return Status::OK;
+            }
         }
 
+        //if buffor dont have full packet in it,
+        //try to receive some data to it
         std::array<char, DATAPACKET_SIZE_T_MAX + sizeof(DATAPACKET_SIZE_T)> receiveBuffor;
         size_t readedBytes = 0;
         Status status = receiveInto(receiveBuffor.data(), receiveBuffor.max_size(), &readedBytes);
-        if(status != Status::OK)
+        if(status != Status::OK)//When mode is non-blocking, function return here
             return status;
 
         std::copy_n(receiveBuffor.begin(), readedBytes-1, dataPacketsBuffer.end());
-    }while(true);
+    } while(true);//Repeat until any full packet will be available in packet buffor
 }
-sj::Status sj::API_RESERVED::Socket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes){
+
+
+///////////////////////////////////////////////
+sj::Status sj::API_RESERVED::Socket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes) {
     const ssize_t recvStatus = recv(socket_fd, buffer, bufferSize, mode == Mode::NON_BLOCKING ? MSG_DONTWAIT : 0);
 
     if(recvStatus == -1){
@@ -124,11 +269,15 @@ sj::Status sj::API_RESERVED::Socket::receiveInto(void* buffer, const size_t buff
     return Status::OK;
 }
 
-sj::Status sj::API_RESERVED::Socket::sendTo(DataPacket& dataPacket, const std::string* ipAddress, const short port){
+
+///////////////////////////////////////////////
+sj::Status sj::API_RESERVED::Socket::sendTo(DataPacket& dataPacket, const std::string* ipAddress, const short port) {
     const DATAPACKET_SIZE_T dataSize = (DATAPACKET_SIZE_T) dataPacket.data.size();
     std::vector<char> buffer(dataSize);
 
+    //Put packet size into buffer
     memcpy(buffer.data(), &dataSize, sizeof(dataSize));
+    //Put packet data into buffer
     for(size_t i=0; i < dataPacket.data.size(); i++){
         buffer[i + sizeof(dataSize)] = dataPacket.data.front();
         dataPacket.data.pop();
@@ -136,9 +285,13 @@ sj::Status sj::API_RESERVED::Socket::sendTo(DataPacket& dataPacket, const std::s
 
     return sendTo(buffer.data(), buffer.size(), ipAddress, port);
 }
-sj::Status sj::API_RESERVED::Socket::sendTo(const void* data, const size_t dataSize, const std::string* ipAddress, const short port){
+
+
+///////////////////////////////////////////////
+sj::Status sj::API_RESERVED::Socket::sendTo(const void* data, const size_t dataSize, const std::string* ipAddress, const short port) {
 
     ssize_t sendStatus = -1;
+    //UDP with receiver IP addres
     if(ipAddress != nullptr && port != -1){
         sockaddr_in addr;
         addr.sin_family = AF_INET;
@@ -149,6 +302,7 @@ sj::Status sj::API_RESERVED::Socket::sendTo(const void* data, const size_t dataS
         }
         sendStatus = ::sendto(socket_fd, data, dataSize, mode == Mode::NON_BLOCKING ? MSG_DONTWAIT : 0, (sockaddr*) &addr, sizeof(addr));
     }
+    //TCP with connected receiver
     else
         sendStatus = ::send(socket_fd, data, dataSize, mode == Mode::NON_BLOCKING ? MSG_DONTWAIT : 0);
 
@@ -162,36 +316,52 @@ sj::Status sj::API_RESERVED::Socket::sendTo(const void* data, const size_t dataS
     return Status::OK;
 }
 
-int sj::API_RESERVED::Socket::getFD(){
+
+///////////////////////////////////////////////
+int sj::API_RESERVED::Socket::getFD() {
     return socket_fd;
 }
 
-void sj::API_RESERVED::Socket::asignFD(const int fd){
+
+///////////////////////////////////////////////
+void sj::API_RESERVED::Socket::asignFD(const int fd) {
     socket_fd = fd;
 }
 
-sj::Mode sj::API_RESERVED::Socket::getMode(){
+
+///////////////////////////////////////////////
+sj::Mode sj::API_RESERVED::Socket::getMode() {
     return mode;
 }
 
-int sj::API_RESERVED::Socket::close(){
+
+///////////////////////////////////////////////
+int sj::API_RESERVED::Socket::close() {
     const int closeValue = ::close(socket_fd);
-    if(closeValue == -1)
+    if(closeValue != -1)
         socket_fd = -1;
 
     return closeValue;
 }
-//Socket Class
 
-//TCPClientSocket Class
-sj::TCPClientSocket::TCPClientSocket(const Mode mode) : socket(mode)
-{}
 
-sj::TCPClientSocket::~TCPClientSocket(){
+///////////////////////////////////////////////
+//  TCPClientSocket Class
+///////////////////////////////////////////////
+sj::TCPClientSocket::TCPClientSocket(const Mode mode) 
+    : socket(mode) {
+
+}
+
+
+///////////////////////////////////////////////
+sj::TCPClientSocket::~TCPClientSocket() {
     disconnect();
 }
 
-sj::Status sj::TCPClientSocket::connect(const std::string& ipAddress, const short port){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::connect(const std::string& ipAddress, const short port) {
     if(isConnected())
         return Status::ERROR;
 
@@ -214,7 +384,9 @@ sj::Status sj::TCPClientSocket::connect(const std::string& ipAddress, const shor
     return Status::OK;
 }
 
-sj::Status sj::TCPClientSocket::disconnect(){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::disconnect() {
     if(isConnected() == false)
         return Status::ERROR;
 
@@ -229,46 +401,66 @@ sj::Status sj::TCPClientSocket::disconnect(){
     return returnStatus;
 }
 
-sj::Status sj::TCPClientSocket::send(DataPacket& dataPacket){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::send(DataPacket& dataPacket) {
     if(isConnected() == false)
         return Status::ERROR;
 
     return socket.sendTo(dataPacket);
 }
-sj::Status sj::TCPClientSocket::send(const void* data, const size_t dataSize){
+
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::send(const void* data, const size_t dataSize) {
     if(isConnected() == false)
         return Status::ERROR;
 
     return socket.sendTo(data, dataSize);
 }
 
-sj::Status sj::TCPClientSocket::receiveInto(DataPacket& dataPacket){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::receiveInto(DataPacket& dataPacket) {
     if(isConnected() == false)
         return Status::ERROR;
 
     return socket.receiveInto(dataPacket);
 }
-sj::Status sj::TCPClientSocket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes){
+
+
+///////////////////////////////////////////////
+sj::Status sj::TCPClientSocket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes) {
     if(isConnected() == false)
         return Status::ERROR;
 
     return socket.receiveInto(buffer, bufferSize, readedBytes);
 }
 
-bool sj::TCPClientSocket::isConnected(){
+
+///////////////////////////////////////////////
+bool sj::TCPClientSocket::isConnected() {
     return socket.getFD() != -1;
 }
-//TCPClientSocket
 
-//TCPListenSocket Class
-sj::TCPListenSocket::TCPListenSocket(const Mode mode) : socket(mode) 
-{}
 
-sj::TCPListenSocket::~TCPListenSocket(){
+///////////////////////////////////////////////
+//  TCPListenSocket Class
+///////////////////////////////////////////////
+sj::TCPListenSocket::TCPListenSocket(const Mode mode) 
+    : socket(mode) {
+
+}
+
+
+///////////////////////////////////////////////
+sj::TCPListenSocket::~TCPListenSocket() {
     endListening();
 }
 
-sj::Status sj::TCPListenSocket::beginListening(const short port){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPListenSocket::beginListening(const short port) {
     if(isListening())
         return Status::ERROR;
 
@@ -289,7 +481,9 @@ sj::Status sj::TCPListenSocket::beginListening(const short port){
     return Status::OK;
 }
 
-sj::Status sj::TCPListenSocket::endListening(){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPListenSocket::endListening() {
     if(isListening() == false)
         return Status::ERROR;
 
@@ -304,7 +498,9 @@ sj::Status sj::TCPListenSocket::endListening(){
     return returnStatus;
 }
 
-sj::Status sj::TCPListenSocket::acceptNewClient(TCPClientSocket& newClient){
+
+///////////////////////////////////////////////
+sj::Status sj::TCPListenSocket::acceptNewClient(TCPClientSocket& newClient) {
     if(isListening() == false || newClient.isConnected())
         return Status::ERROR;
 
@@ -322,17 +518,30 @@ sj::Status sj::TCPListenSocket::acceptNewClient(TCPClientSocket& newClient){
     return Status::OK;
 }
 
-bool sj::TCPListenSocket::isListening(){
+
+///////////////////////////////////////////////
+bool sj::TCPListenSocket::isListening() {
     return socket.getFD() != -1;
 }
-//TCPListenSocket Class
 
-//UDPSocket Class
-sj::UDPSocket::UDPSocket(const Mode mode) : socket(mode) {
-    
+
+///////////////////////////////////////////////
+//  UDPSocket Class
+///////////////////////////////////////////////
+sj::UDPSocket::UDPSocket(const Mode mode) 
+    : socket(mode) {
+
 }
 
-sj::Status sj::UDPSocket::bind(const short port){
+
+///////////////////////////////////////////////
+sj::UDPSocket::~UDPSocket() {
+    unbind();
+}
+
+
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::bind(const short port) {
     if(isBinded())
         return Status::ERROR;
 
@@ -347,7 +556,9 @@ sj::Status sj::UDPSocket::bind(const short port){
     return Status::OK;
 }
 
-sj::Status sj::UDPSocket::unbind(){
+
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::unbind() {
     if(isBinded() == false)
         return Status::ERROR;
 
@@ -357,39 +568,44 @@ sj::Status sj::UDPSocket::unbind(){
     return Status::OK;
 }
 
-sj::UDPSocket::~UDPSocket(){
-    unbind();
-}
 
-sj::Status sj::UDPSocket::sendTo(DataPacket& dataPacket, const std::string& ipAddress, const short port){
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::sendTo(DataPacket& dataPacket, const std::string& ipAddress, const short port) {
     if(isBinded() == false)
         return Status::ERROR;
 
     return socket.sendTo(dataPacket, &ipAddress, port);
 }
 
-sj::Status sj::UDPSocket::sendTo(const void* data, const size_t dataSize, const std::string& ipAddress, const short port){
+
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::sendTo(const void* data, const size_t dataSize, const std::string& ipAddress, const short port) {
     if(isBinded() == false)
         return Status::ERROR;
 
     return socket.sendTo(data, dataSize, &ipAddress, port);
 }
 
-sj::Status sj::UDPSocket::receiveInto(DataPacket& dataPacket){
+
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::receiveInto(DataPacket& dataPacket) {
     if(isBinded() == false)
         return Status::ERROR;
 
     return socket.receiveInto(dataPacket);
 }
 
-sj::Status sj::UDPSocket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes){
+
+///////////////////////////////////////////////
+sj::Status sj::UDPSocket::receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes) {
     if(isBinded() == false)
         return Status::ERROR;
 
     return socket.receiveInto(buffer, bufferSize, readedBytes);
 }
 
-bool sj::UDPSocket::isBinded(){
+
+///////////////////////////////////////////////
+bool sj::UDPSocket::isBinded() {
     return socket.getFD() != -1;
 }
-//UDPSocket Class

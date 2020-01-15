@@ -1,5 +1,5 @@
-//Created by Jakub Stawiski
-// <one line to give the program's name and a brief idea of what it does.>
+//
+// Simple Network Sockets library for Windows and Linux
 
 // Copyright (C) 2020  Jakub Stawiski
 
@@ -17,6 +17,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
+
 #include <string>
 #include <queue>
 #include <list>
@@ -39,29 +40,41 @@ enum struct Mode{
     NON_BLOCKING
 };
 
-namespace API_RESERVED{class Socket;}
+namespace API_RESERVED { class Socket; }
 
-class DataPacket{
+class DataPacket {
     public:
         DataPacket();
+
         ~DataPacket();
+
         Status allDataReaded();
+
         //ADD compress
         //ADD encrypt
+
         DataPacket& operator<<(const std::int8_t value);
         DataPacket& operator<<(const std::int16_t value);
         DataPacket& operator<<(const std::int32_t value);
         DataPacket& operator<<(const std::int64_t value);
+        DataPacket& operator<<(const std::uint8_t value);
+        DataPacket& operator<<(const std::uint16_t value);
+        DataPacket& operator<<(const std::uint32_t value);
+        DataPacket& operator<<(const std::uint64_t value);
         DataPacket& operator<<(const std::string& value);
 
         DataPacket& operator>>(std::int8_t& value);
         DataPacket& operator>>(std::int16_t& value);
         DataPacket& operator>>(std::int32_t& value);
         DataPacket& operator>>(std::int64_t& value);
+        DataPacket& operator>>(std::uint8_t& value);
+        DataPacket& operator>>(std::uint16_t& value);
+        DataPacket& operator>>(std::uint32_t& value);
+        DataPacket& operator>>(std::uint64_t& value);
         DataPacket& operator>>(std::string& value);
+
     private:
         friend class API_RESERVED::Socket;//accesing 'data' in 'send'
-        //friend class UDPSocket;//accesing 'data' in 'send'
 
         std::queue<char> data;
 
@@ -91,8 +104,8 @@ class DataPacket{
         }
 };
 
-namespace API_RESERVED{
-class Socket{
+namespace API_RESERVED {
+class Socket {
     public:
         enum Type{
             TCP,
@@ -111,6 +124,7 @@ class Socket{
         void asignFD(const int fd);
         Mode getMode();
         int close();
+
     private:
         int socket_fd;
         Mode mode;
@@ -121,19 +135,31 @@ class Socket{
 class TCPClientSocket {
     public:
         TCPClientSocket(const Mode mode);
+
         ~TCPClientSocket();
+
         Status connect(const std::string& ipAddress, const short port);
+
         Status disconnect();
+
+        Status send(DataPacket& dataPacket);
+
         //If DataPacket is used, it's not recommended to use
         //low level send(const* void data, ...) because DataPackets 
         //lost may occur.
-        Status send(DataPacket& dataPacket);
         Status send(const void* data, const size_t dataSize);
+
         Status receiveInto(DataPacket& dataPacket);
+
+        //If DataPacket is used, it's not recommended to use
+        //low level receiveInto(const* void buffer, ...) because DataPackets 
+        //lost may occur.
         Status receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes);
+
         bool isConnected();
+
     private:
-        friend class TCPListenSocket;//accesing 'socket_fd' in 'acceptNewClient'
+        friend class TCPListenSocket;//accesing 'socket' in 'acceptNewClient'
 
         API_RESERVED::Socket socket;
 };
@@ -141,11 +167,17 @@ class TCPClientSocket {
 class TCPListenSocket {
     public:
         TCPListenSocket(const Mode mode);
+
         ~TCPListenSocket();
+
         Status beginListening(const short port);
+        
         Status endListening();
+
         Status acceptNewClient(TCPClientSocket& newClient);
+
         bool isListening();
+
     private:
         API_RESERVED::Socket socket;
 };
@@ -153,14 +185,29 @@ class TCPListenSocket {
 class UDPSocket {
     public:
         UDPSocket(const Mode mode);
+
         ~UDPSocket();
+
         Status bind(const short port);
+        
         Status unbind();
+
         Status sendTo(DataPacket& dataPacket, const std::string& ipAddress, const short port);
+
+        //If DataPacket is used, it's not recommended to use
+        //low level send(const* void data, ...) because DataPackets 
+        //lost may occur.
         Status sendTo(const void* data, const size_t dataSize, const std::string& ipAddress, const short port);
+
         Status receiveInto(DataPacket& dataPacket);
+
+        //If DataPacket is used, it's not recommended to use
+        //low level receiveInto(const* void buffer, ...) because DataPackets 
+        //lost may occur.
         Status receiveInto(void* buffer, const size_t bufferSize, size_t* readedBytes);
+
         bool isBinded();
+
     private:
         API_RESERVED::Socket socket;
 };
